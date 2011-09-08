@@ -3,7 +3,8 @@
   <%= stylesheet_link_tag 'facebox', :plugin => 'redmine_msg_preview' %>
 <% end %>
 
-<% if @issue.attachments.length > 0 %>
+<% @msgs = @issue.attachments.select { |att| att.diskfile =~ /\.msg$/i } %>
+<% if @msgs.any? %>
 <hr />
 <p><strong>Attached Outlook Messages</strong></p>
 	<div class="autoscroll">
@@ -15,7 +16,7 @@
 	  <th></th>
     </tr></thead>
     <tbody>
-  <% @issue.attachments.each do |att| %>
+  <% @msgs.each do |att| %>
 	  <% msg = Mapi::Msg.open att.diskfile %>
     <tr class="<%= cycle("odd", "even") %>">
     <td><%= lookup_property(msg, "SENDER") %></td>
