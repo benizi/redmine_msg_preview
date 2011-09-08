@@ -17,6 +17,7 @@
     </tr></thead>
     <tbody>
   <% @msgs.each do |att| %>
+	  <% begin %>
 	  <% msg = Mapi::Msg.open att.diskfile %>
     <tr class="<%= cycle("odd", "even") %>">
     <td><%= lookup_property(msg, "SENDER") %></td>
@@ -26,6 +27,9 @@
       <%= link_to_remote("Open", :class => 'icon open icon-folder', :url => { :controller => "msg", :action => "show", :file_id => att.id }) %>
     </td>
     </tr>
+  <% rescue %>
+	  <tr><td colspan="3">Couldn't parse msg: <%=h att.diskfile %></td></tr>
+  <% end %>
   <% end %>
     </tbody>
   </table>
